@@ -74,6 +74,8 @@ flowchart TD
     style D stroke:#EF6C00,stroke-width:2px
     style I stroke:#C62828,stroke-width:2px
     style K stroke:#6A1B9A,stroke-width:2px
+
+linkStyle 0,1,2,3,4,5,6,7,8 stroke:#636,stroke-width:4px
 ```
 
 ### Key Features
