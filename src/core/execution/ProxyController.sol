@@ -6,6 +6,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {IFeeManager} from "../interfaces/IFeeManager.sol";
 
 contract ProxyController is Ownable, ReentrancyGuard {
     ISwapRouter public immutable swapRouter;
@@ -26,7 +27,10 @@ contract ProxyController is Ownable, ReentrancyGuard {
         _;
     }
 
-    constructor(address _swapRouter) {
+    constructor(
+        address _swapRouter,
+        address initialOwner
+    ) Ownable(initialOwner) ReentrancyGuard() {
         swapRouter = ISwapRouter(_swapRouter);
     }
 
