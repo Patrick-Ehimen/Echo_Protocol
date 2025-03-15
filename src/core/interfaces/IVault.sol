@@ -55,4 +55,13 @@ interface IVault {
         uint256 amountIn,
         uint256 minAmountOut
     ) external returns (uint256);
+
+
+    /**
+     * @notice Returns the high water mark value.
+     * @dev The high water mark is the highest value that the vault has reached.
+     * @return The high water mark as a uint256.
+     */
+    function highWaterMark() external view returns (uint256);
+
 }
