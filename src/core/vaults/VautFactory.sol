@@ -52,9 +52,10 @@ contract VaultFactory is Ownable {
         address _traderVaultImpl,
         address _followerVaultImpl,
         address initialOwner
-    ) Ownable(initialOwner) {
+    ) {
         traderVaultImplementation = _traderVaultImpl;
         followerVaultImplementation = _followerVaultImpl;
+        _transferOwnership(initialOwner);
     }
 
     /**
