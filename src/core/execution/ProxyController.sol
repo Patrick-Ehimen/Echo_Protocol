@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+// import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {ISwapRouter} from "../../../lib/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import {IFeeManager} from "../interfaces/IFeeManager.sol";
 
 contract ProxyController is Ownable, ReentrancyGuard {
@@ -30,8 +31,9 @@ contract ProxyController is Ownable, ReentrancyGuard {
     constructor(
         address _swapRouter,
         address initialOwner
-    ) Ownable(initialOwner) ReentrancyGuard() {
+    ) Ownable() ReentrancyGuard() {
         swapRouter = ISwapRouter(_swapRouter);
+        _transferOwnership(initialOwner);
     }
 
     function executeSwap(
