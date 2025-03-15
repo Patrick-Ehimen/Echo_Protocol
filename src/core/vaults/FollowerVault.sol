@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
@@ -79,8 +79,8 @@ contract FollowerVault is Initializable, OwnableUpgradeable, ReentrancyGuard {
         address _owner,
         address _traderVault
     ) external initializer {
-        __Ownable_init(_owner);
-        transferOwnership(_owner);
+        __Ownable_init();
+        _transferOwnership(_owner);
         traderVault = _traderVault;
         baseToken = ITraderVault(_traderVault).getBaseToken();
     }
