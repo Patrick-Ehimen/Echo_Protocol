@@ -2,6 +2,11 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+solc = "0.8.20"
+
+# Force all dependencies to use the same solidity version
+[profile.default.solc_overrides]
+'*' = "0.8.20"
 
 # Remappings
 Remappings = ["@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/"]
