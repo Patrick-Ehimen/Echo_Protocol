@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 import {IFollowerVault} from "../interfaces/IFollowerVault.sol";
@@ -27,11 +27,18 @@ contract TradeMirror is Ownable, ReentrancyGuard {
         address _vaultFactory,
         address _feeManager,
         address initialOwner
-    ) Ownable(initialOwner) ReentrancyGuard() {
+    ) Ownable() ReentrancyGuard() {
         vaultFactory = _vaultFactory;
         feeManager = _feeManager;
+        _transferOwnership(initialOwner);
     }
 
+    /**
+     * @notice Registers a follower vault to a trader vault.
+     * @dev Only callable by the VaultFactory.
+     * @param traderVault The address of the trader's vault.
+     * @param followerVault The address of the follower's vault.
+     */
     function registerFollowerVault(
         address traderVault,
         address followerVault
@@ -40,6 +47,15 @@ contract TradeMirror is Ownable, ReentrancyGuard {
         followersByTrader[traderVault].push(followerVault);
     }
 
+    /**
+     * @notice Mirrors a trade from a trader's vault to all follower vaults.
+     * @dev This function can only be called by the contract owner and is non-reentrant.
+     * @param traderVault The address of the trader's vault.
+     * @param tokenIn The address of the input token.
+     * @param tokenOut The address of the output token.
+     * @param traderAmountIn The amount of input tokens the trader is trading.
+     * @param minAmountOut The minimum amount of output tokens expected from the trade.
+     */
     function mirrorTrade(
         address traderVault,
         address tokenIn,
