@@ -3,11 +3,12 @@
 pragma solidity ^0.8.0;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 import {IProxyController} from "../interfaces/IProxyController.sol";
+// import {IFeeManager} from "../interfaces/IFeeManager.sol";
 
 contract TraderVault is Initializable, OwnableUpgradeable, ReentrancyGuard {
     // Address of the base token used in the vault
@@ -77,8 +78,8 @@ contract TraderVault is Initializable, OwnableUpgradeable, ReentrancyGuard {
         address _owner,
         address _baseToken
     ) external initializer {
-        __Ownable_init(_owner);
-        transferOwnership(_owner);
+        __Ownable_init();
+        _transferOwnership(_owner);
         baseToken = _baseToken;
     }
 
@@ -115,6 +116,13 @@ contract TraderVault is Initializable, OwnableUpgradeable, ReentrancyGuard {
         IERC20(baseToken).transfer(owner(), amount);
 
         emit Withdraw(owner(), amount);
+
+        // uint256 profit = getPortfolioValue() - highWaterMark;
+        // uint256 fee = IFeeManager(feeManager).calculatePerformanceFee(address(this), profit);
+        
+        // if (fee > 0) {
+        //     IERC20(baseToken).transfer(feeManager, fee);
+        // }
     }
 
     /**
